@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+
+    //--Code 3-19-------------------------
+    document.write("Hello World 1 <br>");
+    document.write("Hello World 2 <br>");
+    document.write("Hello World 3 <br>");
+    document.write("Hello World 4 <br>");
+    document.write("Hello World 5 <br>");
+    document.write("Hello World 6 <br>");
+    document.write("Hello World 7 <br>");
+    document.write("Hello World 8 <br>");
+    document.write("Hello World 9 <br>");
+    document.write("Hello World 10 <br>");
+
+
+    //--Code 3-20-------------------------    
+    for (var i = 1; i <= 10; i++) {
+      document.write("Hello World " + i + "<br>");
+    }
+
+    //--Code 3-21-------------------------    
+    for (var i = 1; i <= 10; i++) {
+      for (var j = 1; j <= 5; j++) {
+        document.write(j);
+      }
+      document.write("<br>");
+    }
+
+    //--Code 3-22-------------------------  
+    for (var i = 0; i < 10; i++) {
+      document.write(i + "<br>");
+      if (i >= 7) {
+        break;
+      }
+    }
+
+    //--Code 3-23-------------------------
+    for (var i = 0; i < 10; i++) {
+      if (i == 7) {
+        continue;
+      }
+      document.write(i + "<br>");
+    }
+
+    //--Code 3-24-------------------------
+    var i = 0;
+    while (i < 10) {
+      document.write(i + " in while loop <br>");
+      i++;
+    }
+
+    //--Code 3-25-------------------------
+    var j = 0;
+    do {
+      document.write(j + " in do while loop <br>");
+      j++;
+    } while (j < 10);
+  </script>
+</body>
+
+</html>

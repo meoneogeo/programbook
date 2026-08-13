@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin="" />
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
+
+    <style>
+        #mapid {
+            height: 800px;
+        }
+    </style>
+
+    <title>First Map</title>
+</head>
+
+<body>
+    <div id="mapid"></div>
+
+    <script>
+        var map = L.map("mapid").setView([16.744274, 100.194878], 15);
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            attribution:
+                '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        }).addTo(map);
+
+        //--Code 5-2-------------------------------------
+        var myMarker = L.marker([16.744274, 100.194878]);
+        myMarker.bindPopup("this is a Marker");
+        myMarker.addTo(map);
+        myMarker.openPopup();
+
+        //--Code 5-3-------------------------------------
+        var tourPlace = [
+            {
+                id: 1,
+                name: "วัดใหญ่ฯ",
+                province: "พิษณุโลก",
+                coordinate: [16.823733139595014, 100.26208978216431],
+                type: "วัด",
+            },
+            {
+                id: 2,
+                name: "วัดราษฎร์บูรณะ",
+                province: "พิษณุโลก",
+                coordinate: [16.82209470135332, 100.26065774774955],
+                type: "วัด",
+            },
+            {
+                id: 3,
+                name: "วัดนางพญา",
+                province: "พิษณุโลก",
+                coordinate: [16.822610789009357, 100.26191366549615],
+                type: "วัด",
+            },
+            {
+                id: 4,
+                name: "พระราชวังจันทน์",
+                province: "พิษณุโลก",
+                coordinate: [16.829756050098936, 100.26151036481399],
+                type: "พิพิธภัณฑ์",
+            },
+        ];
+
+        var marker_tour = tourPlace.map((item) => {
+            var coors = item.coordinate;
+            return L.marker(coors).bindPopup(item.name).addTo(map);
+        });
+
+        //-- Code 5-5 ปรับแก้เพิ่มเติมจากโค้ดด้านบน--------------------------
+        // var marker_tour = tourPlace.map((item) => {
+        //   var coors = item.coordinate;
+        //   var icon;
+        //   if (item.type == "วัด") {
+        //     icon = L.icon({ iconUrl: "temple.png", iconSize: [40, 40] });
+        //   } else {
+        //     icon = L.icon({ iconUrl: "museum.png", iconSize: [40, 40] });
+        //   }
+
+        //   return L.marker(coors, {
+        //     icon: icon,
+        //   })
+        //     .bindPopup(item.name)
+        //     .addTo(map);
+        // });
+
+        //--Code 5-4-------------------------------------
+        var tour_filter = tourPlace.filter((item) => {
+            return item.name.includes("วัด");
+        });
+
+        var marker_tour_filter = tour_filter.map((item) => {
+            var coors = item.coordinate;
+            return L.marker(coors).bindPopup(item.name).addTo(map);
+        });
+
+
+        //--Code 5-6-------------------------------------
+        var latlngs = [
+            [16.774308, 100.177609],
+            [16.760948, 100.215101],
+            [16.759556, 100.218738],
+        ];
+
+        var polyline = L.polyline(latlngs, { color: "red" }).addTo(map);
+
+
+        //--Code 5-7-------------------------------------
+        var lineSample = [
+            {
+                id: 1,
+                name: "RoadA",
+                coordinates: [
+                    [16.7727018, 100.216115],
+                    [16.7726607, 100.217272],
+                    [16.7740554, 100.221578],
+                ],
+                color: "red",
+            },
+            {
+                id: 2,
+                name: "RoadB",
+                coordinates: [
+                    [16.769389, 100.215949],
+                    [16.769473, 100.216437],
+                    [16.770128, 100.218519],
+                ],
+                color: "#00ff00",
+            },
+            {
+                id: 3,
+                name: "RoadC",
+                coordinates: [
+                    [16.770003, 100.215737],
+                    [16.769898, 100.215191],
+                    [16.769933, 100.214084],
+                ],
+                color: "#0000ff",
+            },
+        ];
+
+        var roadLine = lineSample.map((item) => {
+            return L.polyline(item.coordinates, { color: item.color }).bindPopup(
+                item.name
+            );
+        });
+
+        var lineGroup = L.layerGroup(roadLine).addTo(map);
+
+
+        //--Code 5-8-------------------------------------
+        var latlngs = [
+            [16.752523, 100.189577],
+            [16.748772, 100.201296],
+            [16.742169, 100.190075],
+            [16.752523, 100.189577],
+        ];
+        var polygon = L.polygon(latlngs, { color: "red" }).addTo(map);
+
+
+        //--Code 5-9-------------------------------------
+        var polygonSample = [
+            {
+                id: 1,
+                name: "Agriculture",
+                coordinates: [
+                    [16.7464065, 100.195074],
+                    [16.746675, 100.195642],
+                    [16.7457419, 100.19614],
+                    [16.7454599, 100.195628],
+                    [16.7464065, 100.195074],
+                ],
+                color: "red",
+            },
+            {
+                id: 2,
+                name: "CITCOMS",
+                coordinates: [
+                    [16.747578, 100.195036],
+                    [16.747731, 100.195361],
+                    [16.747332, 100.195592],
+                    [16.747175, 100.195271],
+                    [16.747578, 100.195036],
+                ],
+                color: "#00ff00",
+            },
+            {
+                id: 3,
+                name: "International College",
+                coordinates: [
+                    [16.745421, 100.193072],
+                    [16.745671, 100.193533],
+                    [16.745229, 100.19377],
+                    [16.744997, 100.193308],
+                    [16.745421, 100.193072],
+                ],
+                color: "#BC2FBE",
+            },
+        ];
+
+        var building = polygonSample.map((item) => {
+            return L.polygon(item.coordinates, { color: item.color }).bindPopup(
+                item.name
+            );
+        });
+
+        var polygonGroup = L.layerGroup(building).addTo(map);
+    </script>
+</body>
+
+</html>

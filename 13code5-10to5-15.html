@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin="" />
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
+
+    <style>
+        #mapid {
+            height: 800px;
+        }
+    </style>
+
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="mapid"></div>
+
+    <script>
+
+        var map = L.map("mapid").setView([16.744274, 100.194878], 15);
+        var osm = L.tileLayer(
+            "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        ).addTo(map);
+        var gsat = L.tileLayer(
+            "https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
+        );
+
+        var baseMaps = {
+            OSM: osm,
+            GoogleSat: gsat,
+        };
+
+        var placeNU = [
+            {
+                id: 1,
+                name: "Agriculture",
+                province: "พิษณุโลก",
+                coordinate: [16.74607477, 100.19573962],
+            },
+            {
+                id: 2,
+                name: "CITCOMS",
+                province: "พิษณุโลก",
+                coordinate: [16.7474903, 100.195403],
+            },
+        ];
+
+        var marker_place = placeNU.map((item) => {
+            var coors = item.coordinate;
+            return L.marker(coors).bindPopup(item.name);
+        });
+
+        var placeGroup = L.layerGroup(marker_place);
+
+        var lineSample = [
+            {
+                id: 1,
+                name: "RoadA",
+                coordinates: [
+                    [16.7727018, 100.216115],
+                    [16.7726607, 100.217272],
+                    [16.7740554, 100.221578],
+                ],
+                color: "red",
+            },
+            {
+                id: 2,
+                name: "RoadB",
+                coordinates: [
+                    [16.769389, 100.215949],
+                    [16.769473, 100.216437],
+                    [16.770128, 100.218519],
+                ],
+                color: "#00ff00",
+            },
+        ];
+
+        var roadLine = lineSample.map((item) => {
+            return L.polyline(item.coordinates, { color: item.color }).bindPopup(
+                item.name
+            );
+        });
+
+        var lineGroup = L.layerGroup(roadLine);
+
+        var polygonSample = [
+            {
+                id: 1,
+                name: "Agriculture",
+                coordinates: [
+                    [16.7464065, 100.195074],
+                    [16.746675, 100.195642],
+                    [16.7457419, 100.19614],
+                    [16.7454599, 100.195628],
+                    [16.7464065, 100.195074],
+                ],
+                color: "red",
+            },
+            {
+                id: 2,
+                name: "CITCOMS",
+                coordinates: [
+                    [16.747578, 100.195036],
+                    [16.747731, 100.195361],
+                    [16.747332, 100.195592],
+                    [16.747175, 100.195271],
+                    [16.747578, 100.195036],
+                ],
+                color: "#00ff00",
+            },
+        ];
+
+        var building = polygonSample.map((item) => {
+            return L.polygon(item.coordinates, { color: item.color }).bindPopup(
+                item.name
+            );
+        });
+
+        var polygonGroup = L.layerGroup(building);
+
+        var tourpoint = {
+            type: "FeatureCollection",
+            name: "tour_plk",
+            crs: {
+                type: "name",
+                properties: { name: "urn:ogc:def:crs:OGC:1.3:CRS84" },
+            },
+            features: [
+                {
+                    type: "Feature",
+                    properties: {
+                        Name: "อช.ภูสอยดาว",
+                        Type: "อุทยานและวนอุทยาน",
+                        FID_1: 1358.0,
+                        CHANGWAT: "พิษณุโลก",
+                        PROVINCE_1: "Phitsanulok",
+                        REGION: "ภาคเหนือ",
+                        level: "B",
+                    },
+                    geometry: {
+                        type: "MultiPoint",
+                        coordinates: [[100.947166666666661, 17.69645]],
+                    },
+                },
+                {
+                    type: "Feature",
+                    properties: {
+                        Name: "อช.น้ำตกชาติตระการ",
+                        Type: "อุทยานและวนอุทยาน",
+                        FID_1: 1357.0,
+                        CHANGWAT: "พิษณุโลก",
+                        PROVINCE_1: "Phitsanulok",
+                        REGION: "ภาคเหนือ",
+                        level: "B",
+                    },
+                    geometry: {
+                        type: "MultiPoint",
+                        coordinates: [[100.677166666666665, 17.301816666666667]],
+                    },
+                },
+                {
+                    type: "Feature",
+                    properties: {
+                        Name: "น้ำตกชาติตระการ",
+                        Type: "ธรรมชาติ",
+                        FID_1: 1362.0,
+                        CHANGWAT: "พิษณุโลก",
+                        PROVINCE_1: "Phitsanulok",
+                        REGION: "ภาคเหนือ",
+                        level: "B",
+                    },
+                    geometry: {
+                        type: "MultiPoint",
+                        coordinates: [[100.6831, 17.2981]],
+                    },
+                },
+                {
+                    type: "Feature",
+                    properties: {
+                        Name: "น้ำตกนาจาน",
+                        Type: "ธรรมชาติ",
+                        FID_1: 1364.0,
+                        CHANGWAT: "พิษณุโลก",
+                        PROVINCE_1: "Phitsanulok",
+                        REGION: "ภาคเหนือ",
+                        level: "D",
+                    },
+                    geometry: {
+                        type: "MultiPoint",
+                        coordinates: [[100.691283333333331, 17.3185]],
+                    },
+                },
+                {
+                    type: "Feature",
+                    properties: {
+                        Name: "อช.แก่งเจ็ดแคว",
+                        Type: "อุทยานและวนอุทยาน",
+                        FID_1: 1355.0,
+                        CHANGWAT: "พิษณุโลก",
+                        PROVINCE_1: "Phitsanulok",
+                        REGION: "ภาคเหนือ",
+                        level: "D",
+                    },
+                    geometry: {
+                        type: "MultiPoint",
+                        coordinates: [[100.44016666666667, 17.1411]],
+                    },
+                },
+                {
+                    type: "Feature",
+                    properties: {
+                        Name: "น้ำตกน้ำโจน",
+                        Type: "ธรรมชาติ",
+                        FID_1: 1365.0,
+                        CHANGWAT: "พิษณุโลก",
+                        PROVINCE_1: "Phitsanulok",
+                        REGION: "ภาคเหนือ",
+                        level: "D",
+                    },
+                    geometry: {
+                        type: "MultiPoint",
+                        coordinates: [[100.416783333333328, 17.172966666666667]],
+                    },
+                },
+                {
+                    type: "Feature",
+                    properties: {
+                        Name: "น้ำตกแก่งไทร",
+                        Type: "ธรรมชาติ",
+                        FID_1: 733.0,
+                        CHANGWAT: "มุกดาหาร",
+                        PROVINCE_1: "Mukdahan",
+                        REGION: "ภาคตะวันออกเฉียงเหนือ",
+                        level: "D",
+                    },
+                    geometry: {
+                        type: "MultiPoint",
+                        coordinates: [[100.43675, 17.143116666666668]],
+                    },
+                },
+                {
+                    type: "Feature",
+                    properties: {
+                        Name: "อช.ภูหินร่องกล้า",
+                        Type: "อุทยานและวนอุทยาน",
+                        FID_1: 1359.0,
+                        CHANGWAT: "พิษณุโลก",
+                        PROVINCE_1: "Phitsanulok",
+                        REGION: "ภาคเหนือ",
+                        level: "A",
+                    },
+                    geometry: {
+                        type: "MultiPoint",
+                        coordinates: [[100.993266666666671, 17.00305]],
+                    },
+                },
+                {
+                    type: "Feature",
+                    properties: {
+                        Name: "น้ำตกผาลาด",
+                        Type: "ธรรมชาติ",
+                        FID_1: 603.0,
+                        CHANGWAT: "เลย",
+                        PROVINCE_1: "Loei",
+                        REGION: "ภาคตะวันออกเฉียงเหนือ",
+                        level: "C",
+                    },
+                    geometry: {
+                        type: "MultiPoint",
+                        coordinates: [[100.938583333333327, 17.032866666666667]],
+                    },
+                },
+                {
+                    type: "Feature",
+                    properties: {
+                        Name: "ลานหินแตก",
+                        Type: "ธรรมชาติ",
+                        FID_1: 611.0,
+                        CHANGWAT: "เลย",
+                        PROVINCE_1: "Loei",
+                        REGION: "ภาคตะวันออกเฉียงเหนือ",
+                        level: "A",
+                    },
+                    geometry: { type: "MultiPoint", coordinates: [[100.99, 17.00615]] },
+                },
+                {
+                    type: "Feature",
+                    properties: {
+                        Name: "ลานหินปุ่ม",
+                        Type: "ธรรมชาติ",
+                        FID_1: 1370.0,
+                        CHANGWAT: "พิษณุโลก",
+                        PROVINCE_1: "Phitsanulok",
+                        REGION: "ภาคเหนือ",
+                        level: "B",
+                    },
+                    geometry: {
+                        type: "MultiPoint",
+                        coordinates: [[100.99705, 16.9881]],
+                    },
+                },
+            ],
+        };
+
+        var tourLayer = L.geoJSON(tourpoint, {
+            pointToLayer: function (feature, latlng) {
+                return L.marker(latlng).bindPopup(feature.properties.Name);
+            },
+        });
+
+        // var tourLayer = L.geoJSON(tourpoint, {
+        //   pointToLayer: function (feature, latlng) {
+        //     return L.marker(latlng).bindPopup(feature.properties.Name);
+        //   },
+        //   filter: function (feature) {
+        //     return feature.properties.level == "C";
+        //   },
+        // });
+
+        // var tourLayer = L.geoJSON(tourpoint, {
+        //   pointToLayer: function (feature, latlng) {
+        //     return L.marker(latlng);
+        //   },
+        //   onEachFeature: function (feature, layer) {
+        //     layer.bindPopup(feature.properties.Type);
+
+        //     layer.on("mouseover", function () {
+        //       console.log(feature.properties.level);
+        //     });
+        //   },
+        // });
+
+        var lineGeoJSON = {
+            type: "FeatureCollection",
+            features: [
+                {
+                    type: "Feature",
+                    properties: {
+                        color: "red",
+                        roadnum: "1158",
+                    },
+                    geometry: {
+                        type: "LineString",
+                        coordinates: [
+                            [100.21505355834961, 16.801090097144122],
+                            [100.22509574890137, 16.80018625887646],
+                            [100.2268123626709, 16.798789409450087],
+                            [100.22912979125975, 16.795913510612174],
+                            [100.23033142089844, 16.792215862368693],
+                        ],
+                    },
+                },
+                {
+                    type: "Feature",
+                    properties: {
+                        color: "#0000ff",
+                        roadnum: "1063",
+                    },
+                    geometry: {
+                        type: "LineString",
+                        coordinates: [
+                            [100.21505355834961, 16.760906222665884],
+                            [100.21531105041502, 16.76797394108636],
+                            [100.2184009552002, 16.788929003474045],
+                            [100.22878646850586, 16.791887179039534],
+                            [100.2389144897461, 16.794516629740418],
+                            [100.24629592895508, 16.799611086828403],
+                            [100.25436401367188, 16.805362728855393],
+                        ],
+                    },
+                },
+            ],
+        };
+
+        var lineStringGeoJson = L.geoJSON(lineGeoJSON, {
+            style: function (feature) {
+                return { color: feature.properties.color };
+            },
+            onEachFeature: function (feature, layer) {
+                layer.bindPopup(feature.properties.roadnum);
+            },
+        });
+
+        var polygonGeoJson = {
+            type: "FeatureCollection",
+            features: [
+                {
+                    type: "Feature",
+                    properties: {
+                        color: "#fdf000",
+                        name: "CITCOMS",
+                    },
+                    geometry: {
+                        type: "Polygon",
+                        coordinates: [
+                            [
+                                [100.1948457956314, 16.74756621603926],
+                                [100.19521057605742, 16.746934378906072],
+                                [100.1956182718277, 16.74714499151676],
+                                [100.19527494907379, 16.74778710169689],
+                                [100.1948457956314, 16.74756621603926],
+                            ],
+                        ],
+                    },
+                },
+                {
+                    type: "Feature",
+                    properties: {
+                        color: "#fd00f0",
+                        name: "Agriculture",
+                    },
+                    geometry: {
+                        type: "Polygon",
+                        coordinates: [
+                            [
+                                [100.19507646560669, 16.746430962453704],
+                                [100.19558608531952, 16.745511453457162],
+                                [100.19595086574554, 16.745660424489845],
+                                [100.19584894180298, 16.74586590158508],
+                                [100.19602596759796, 16.74595322928342],
+                                [100.19569873809814, 16.746523426799836],
+                                [100.19567191600798, 16.746513152985816],
+                                [100.19565045833588, 16.746543974426203],
+                                [100.19555926322937, 16.746682670846255],
+                                [100.19507646560669, 16.746430962453704],
+                            ],
+                        ],
+                    },
+                },
+            ],
+        };
+
+        var polygonLayer = L.geoJSON(polygonGeoJson, {
+            style: function (feature) {
+                return { color: feature.properties.color };
+            },
+            onEachFeature: function (feature, layer) {
+                layer.bindPopup(feature.properties.name);
+
+                layer.on("mouseover", function () {
+                    layer.openPopup();
+                });
+
+                layer.on("mouseout", function () {
+                    layer.closePopup();
+                });
+            },
+        });
+
+        //การใช้งานเมธอด filter() กับออบเจ็กต์ท่ัวไป
+        var tourLevelA = tourpoint.features.filter((item) => {
+            return item.properties.level == "A";
+        });
+
+        var tourPointFilter = { ...tourpoint, features: tourLevelA };
+
+        var tourLevelALayer = L.geoJSON(tourPointFilter, {
+            pointToLayer: function (feature, latlng) {
+                return L.marker(latlng).bindPopup(feature.properties.Name);
+            },
+        });
+
+        var tourLevelAGeoJson = L.geoJSON(tourpoint, {
+            pointToLayer: function (feature, latlng) {
+                return L.marker(latlng).bindPopup(feature.properties.Name);
+            },
+            filter: function (feature) {
+                return (
+                    feature.properties.level == "D" &&
+                    feature.properties.Type.includes("ธรรมชาติ")
+                );
+            },
+        });
+
+        var overlays = {
+            PlaceNU: placeGroup,
+            Road: lineGroup,
+            Building: polygonGroup,
+            Tourplace: tourLayer,
+            RoadJSON: lineStringGeoJson,
+            BuildJSON: polygonLayer,
+            TourLevelA: tourLevelALayer,
+            TourLevelAGeoJSON: tourLevelAGeoJson,
+        };
+
+        L.control.layers(baseMaps, overlays).addTo(map);
+        // var bbb = L.geoJSON(tourpoint);
+        // console.log(bbb);
+        // console.log(polygonLayer);
+
+        class PointGeoJSON {
+            constructor(geoJSON) {
+                this.geoJSON = geoJSON;
+                if (
+                    this.geoJSON.features[0].geometry.type != "Point" &&
+                    this.geoJSON.features[0].geometry.type != "MultiPoint"
+                ) {
+                    throw "This is not Point or MultiPoint data.";
+                }
+            }
+
+            get geoJSONData() {
+                return this.geoJSON;
+            }
+
+            get coordinate() {
+                var coors = this.geoJSON.features.map((item) => {
+                    return item.geometry.coordinates;
+                });
+                return coors;
+            }
+
+            listProp(keyName) {
+                let keyObjects = Object.keys(this.geoJSON.features[0].properties);
+                let checkKey = keyObjects.filter((item) => {
+                    return item == keyName;
+                });
+                if (checkKey.length > 0) {
+                    var namePoint = this.geoJSON.features.map((item) => {
+                        return item.properties[keyName];
+                    });
+                    return namePoint;
+                } else {
+                    throw "There is no key available in the properties.";
+                }
+            }
+
+            addValueToProp(keyName, value) {
+                let keyObjects = Object.keys(this.geoJSON.features[0].properties);
+                let checkKey = keyObjects.filter((item) => {
+                    return item == keyName;
+                });
+                if (checkKey.length > 0) {
+                    throw "The key name is not available";
+                } else {
+                    for (let i in this.geoJSON.features) {
+                        this.geoJSON.features[i].properties[keyName] = value;
+                    }
+                }
+            }
+        }
+
+    </script>
+</body>
+
+</html>

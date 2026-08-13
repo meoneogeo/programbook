@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@5/turf.min.js"></script>
+
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+
+        //--Code 6-1--------------------------------------
+        var pointGeoJson = {
+            type: "FeatureCollection",
+            features: [
+                {
+                    type: "Feature",
+                    geometry: {
+                        type: "Point",
+                        coordinates: [100.05462, 16.5485],
+                    },
+                    properties: {
+                        name: "Point A",
+                    },
+                },
+                {
+                    type: "Feature",
+                    geometry: {
+                        type: "Point",
+                        coordinates: [101.254, 16.54245],
+                    },
+                    properties: {
+                        name: "Point B",
+                    },
+                },
+            ],
+        };
+        console.log(pointGeoJson);
+
+        var locationA = turf.point([100.05462, 16.5485], { name: "Point A" });
+        var locationB = turf.point([101.254, 16.54245], { name: "Point B" });
+
+        var pointFromTurf = turf.featureCollection([locationA, locationB]);
+        console.log(pointFromTurf);
+
+
+        //--Code 6-2-----------------------------------------
+        var lineGeojson = {
+            type: "FeatureCollection",
+            features: [
+                {
+                    type: "Feature",
+                    properties: {
+                        name: "rd126",
+                    },
+                    geometry: {
+                        type: "LineString",
+                        coordinates: [
+                            [100.18046379089354, 16.73978368572649],
+                            [100.18278121948241, 16.74529056515971],
+                            [100.19522666931152, 16.767809578524716],
+                            [100.21359443664551, 16.761481511890242],
+                        ],
+                    },
+                },
+                {
+                    type: "Feature",
+                    properties: {
+                        name: "rd117",
+                    },
+                    geometry: {
+                        type: "LineString",
+                        coordinates: [
+                            [100.19479751586914, 16.76797394108636],
+                            [100.17685890197752, 16.774383970165566],
+                        ],
+                    },
+                },
+            ],
+        };
+
+        console.log(lineGeojson);
+
+        var lineString1 = turf.lineString(
+            [
+                [100.18046379089354, 16.73978368572649],
+                [100.18278121948241, 16.74529056515971],
+                [100.19522666931152, 16.767809578524716],
+                [100.21359443664551, 16.761481511890242],
+            ],
+            { name: "rd126" }
+        );
+        var lineString2 = turf.lineString(
+            [
+                [100.18046379089354, 16.73978368572649],
+                [100.18278121948241, 16.74529056515971],
+                [100.19522666931152, 16.767809578524716],
+                [100.21359443664551, 16.761481511890242],
+            ],
+            { name: "rd117" }
+        );
+
+        var lineFromTurf = turf.featureCollection([lineString1, lineString2]);
+        console.log(lineFromTurf);
+
+
+        //--Code 6-3-----------------------------------------
+        var polygonGeojson = {
+            type: "FeatureCollection",
+            features: [
+                {
+                    type: "Feature",
+                    properties: { name: "Polygon A" },
+                    geometry: {
+                        type: "Polygon",
+                        coordinates: [
+                            [
+                                [100.16475677490234, 16.751619170223876],
+                                [100.16561508178711, 16.748249419685727],
+                                [100.16827583312988, 16.74438646155075],
+                                [100.17917633056639, 16.74841379914455],
+                                [100.18346786499023, 16.755071047947055],
+                                [100.17531394958496, 16.7646866628626],
+                                [100.16475677490234, 16.751619170223876],
+                            ],
+                        ],
+                    },
+                },
+                {
+                    type: "Feature",
+                    properties: { name: "Polygon B" },
+                    geometry: {
+                        type: "Polygon",
+                        coordinates: [
+                            [
+                                [100.20458221435547, 16.749400072917176],
+                                [100.20526885986328, 16.748249419685727],
+                                [100.2066421508789, 16.746276855110377],
+                                [100.20818710327148, 16.749564451382533],
+                                [100.20458221435547, 16.749400072917176],
+                            ],
+                        ],
+                    },
+                },
+            ],
+        };
+
+        console.log(polygonGeojson);
+
+        var polygon1 = turf.polygon(
+            [
+                [
+                    [100.16475677490234, 16.751619170223876],
+                    [100.16561508178711, 16.748249419685727],
+                    [100.16827583312988, 16.74438646155075],
+                    [100.17917633056639, 16.74841379914455],
+                    [100.18346786499023, 16.755071047947055],
+                    [100.17531394958496, 16.7646866628626],
+                    [100.16475677490234, 16.751619170223876],
+                ],
+            ],
+            { name: "Polygon A" }
+        );
+        var polygon2 = turf.polygon(
+            [
+                [
+                    [100.20458221435547, 16.749400072917176],
+                    [100.20526885986328, 16.748249419685727],
+                    [100.2066421508789, 16.746276855110377],
+                    [100.20818710327148, 16.749564451382533],
+                    [100.20458221435547, 16.749400072917176],
+                ],
+            ],
+            { name: "Polygon B" }
+        );
+
+        var polygonFromTurf = turf.featureCollection([polygon1, polygon2]);
+        console.log(polygonFromTurf);
+
+
+        //--Code 6-4-----------------------------------------
+        var pointSample = [
+            { name: "Point A", coordinates: [100.3554, 16.4535] },
+            { name: "Point B", coordinates: [100.3445, 16.4335] },
+            { name: "Point C", coordinates: [100.3354, 16.4545] },
+            { name: "Point D", coordinates: [100.3525, 16.4235] },
+            { name: "Point E", coordinates: [100.3564, 16.4536] },
+        ];
+
+        console.log(pointSample);
+
+        var pointTurf = pointSample.map((item) => {
+            return turf.point(item.coordinates, { name: item.name });
+        });
+        var pointCollection = turf.featureCollection(pointTurf);
+        console.log(pointCollection);
+
+
+        //--Code 6-5-----------------------------------------
+        var from = turf.point([100.3554, 16.4535]);
+        var to = turf.point([100.3564, 16.4536]);
+        var options = { units: "kilometers" };
+
+        var distance = turf.distance(from, to, options);
+        console.log(distance);
+
+
+        var dist = turf.coordEach(pointCollection, function (
+            currentCoord,
+            coordIndex,
+            featureIndex,
+            multiFeatureIndex,
+            geometryIndex
+        ) {
+            let origin = turf.point([100.4567, 16.7664]);
+            let diss = turf.distance(origin, currentCoord, { unit: "kilometers" });
+            console.log(diss);
+        });
+        console.log(dist);
+
+
+        //--Code 6-6-----------------------------------------
+        var lineLength = turf.length(lineFromTurf.features[0], {
+            unit: "kilometers",
+        });
+        console.log(lineLength);
+
+
+        //--Code 6-7-----------------------------------------
+        var polygonArea = turf.area(polygonFromTurf.features[0]);
+        console.log(polygonArea);
+
+
+        //--Code 6-8-----------------------------------------
+        var centroidPolygon = turf.centroid(polygonFromTurf.features[0]);
+        console.log(centroidPolygon);
+
+
+        //--Code 6-9-----------------------------------------
+        var distMatrix = [];
+        for (let i in pointCollection.features) {
+            let origin = pointCollection.features[i];
+            var dist1 = pointCollection.features.map((item) => {
+                let diss = turf.distance(origin, item, {
+                    unit: "kilometers",
+                });
+                return diss;
+            });
+            distMatrix.push(dist1);
+        }
+        console.log(distMatrix);
+
+
+        //--Code 6-10-----------------------------------------
+        var lengthKM = turf.convertLength(3000, "meters", "kilometers");
+        var lengthMile = turf.convertLength(3000, "meters", "miles");
+        var lengthFeet = turf.convertLength(3000, "meters", "feet");
+        var lengthYard = turf.convertLength(3000, "meters", "yards");
+        console.log(lengthKM);
+        console.log(lengthMile);
+        console.log(lengthFeet);
+        console.log(lengthYard);
+
+
+        //--Code 6-11-----------------------------------------
+        var areaKM = turf.convertArea(3000000, "meters", "kilometers");
+        var areaMile = turf.convertArea(3000000, "meters", "miles");
+        var areaFeet = turf.convertArea(3000000, "meters", "feet");
+        var areaYard = turf.convertArea(3000000, "meters", "yards");
+        console.log(areaKM);
+        console.log(areaMile);
+        console.log(areaFeet);
+        console.log(areaYard);
+
+        var pointCollectionMercator = turf.toMercator(pointCollection);
+        console.log(pointCollectionMercator);
+
+        var degToRad = turf.degreesToRadians(45.02432);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+
+    //--Code 3-26-----------------------
+    var a = [1, 2, 3, 4, 5];
+    var b = [];
+    var c = Array("A", "B", "C", "D");
+    var d = Array(5);
+    var e = new Array("Monitor", "Keyboard", 45, 20, "Mouse");
+
+    console.log(a);
+    console.log(b);
+    console.log(c);
+    console.log(d);
+    console.log(e);
+
+
+    //--Code 3-27-----------------------
+    var a = [14, 20, 32, 47, 58];
+    console.log("สมาชิกตัวแรกคือ" + a[0]);
+    console.log("สมาชิกตัวที่สองคือ" + a[1]);
+    console.log("สมาชิกตัวที่สามคือ" + a[2]);
+    console.log("สมาชิกตัวที่สี่คือ" + a[3]);
+    console.log("สมาชิกตัวสุดท้ายคือ" + a[4]);
+
+    //--Code 3-28-----------------------
+    var a = [14, 20, 32, 47, 58];
+    for (var i = 0; i < a.length; i++) {
+      console.log("สมาชิกตัวที่ " + (i + 1) + " คือ " + a[i]);
+    }
+
+    //--Code 3-29-----------------------
+    var a = [14, 20, 32, 47, 58];
+    for (var i in a) {
+      console.log("สมาชิกตัวที่ " + (parseInt(i) + 1) + " คือ " + a[i]);
+    }
+
+    //--Code 3-30-----------------------
+    var a = [45, 20, 2, 87, 13];
+    console.log(a.indexOf(87));
+
+    var a = [45, 20, 2, 87, 13];
+    a.sort();
+    console.log(a);
+
+    var a = ["Apple", "Orange", "Banana"];
+    a.sort();
+    console.log(a);
+
+    var a = [45, 20, 2, 87, 13];
+    a.reverse();
+    console.log(a);
+
+    var a = [45, 20, 2, 87, 13];
+    a.fill(55);
+    console.log(a);
+
+    var a = [45, 20, 2, 87, 13];
+    a.push(2, 56, 43);
+    console.log(a);
+
+    var a = [45, 20, 2, 87, 13];
+    console.log(a.pop());
+
+    var a = [45, 20, 2, 87, 13];
+    var b = a.slice(2, 5);
+    console.log(b);
+
+    var a = [45, 20, 2, 87, 13];
+    var c = a.splice(0, 3);
+    console.log(c);
+
+
+    //--Code 3-31-----------------------
+    var a = [45, 20, 2, 87, 13];
+    console.log(...a);
+
+    var b = [...a];
+    console.log(b);
+
+    var c = [4, 43, 66, ...b, 12, 34, 53];
+    console.log(c);
+
+    var d = "GeoComputation";
+    var e = [...d];
+    console.log(e);
+
+    var f = [4.5, 6.4, 8.4, 2.4];
+    console.log(Math.min(...f));
+
+    var g = [...a, ...f];
+    console.log(g);
+
+    //--Code 3-32-----------------------
+    var img = [
+      [12, 23, 67, 124, 155],
+      [45, 89, 90, 129, 145],
+      [45, 76, 97, 110, 154],
+      [47, 56, 90, 130, 176],
+      [54, 57, 101, 121, 178],
+    ];
+
+    for (var i = 0; i < img.length; i++) {
+      for (var j = 0; j < img[i].length; j++) {
+        document.write(img[i][j] * 2 + " ");
+      }
+      document.write("<br>");
+    }
+
+
+    //--Code 3-34-----------------------
+    var nir = [
+      [100, 243, 50, 45, 22, 190],
+      [200, 32, 145, 34, 112, 32],
+      [45, 222, 1, 3, 43, 10],
+      [45, 32, 4, 3, 5, 22],
+      [67, 54, 56, 33, 56, 32],
+    ];
+
+    var red = [
+      [10, 45, 43, 45, 100, 70],
+      [100, 45, 200, 33, 72, 10],
+      [56, 22, 100, 134, 143, 100],
+      [45, 132, 40, 13, 65, 220],
+      [44, 44, 34, 35, 14, 67],
+    ];
+
+    for (var i = 0; i < nir.length; i++) {
+      for (var j = 0; j < nir[i].length; j++) {
+        var ndvi = (nir[i][j] - red[i][j]) / (nir[i][j] + red[i][j]);
+        var ndvi_1 = ndvi.toFixed(2);
+        document.write(ndvi_1 + " ");
+      }
+      document.write("<br>");
+    }
+
+  </script>
+</body>
+
+</html>

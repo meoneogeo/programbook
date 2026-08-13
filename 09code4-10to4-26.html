@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+
+        //--Code 4-10--------------------------------------
+        var pointGeoJson = {
+            type: "FeatureCollection",
+            features: [
+                {
+                    type: "Feature",
+                    geometry: {
+                        type: "Point",
+                        coordinates: [100.05462, 16.5485],
+                    },
+                    properties: {
+                        name: "Point A",
+                    },
+                },
+                {
+                    type: "Feature",
+                    geometry: {
+                        type: "Point",
+                        coordinates: [101.254, 16.54245],
+                    },
+                    properties: {
+                        name: "Point B",
+                    },
+                },
+            ],
+        };
+
+        console.log(pointGeoJson);
+        console.log(pointGeoJson.features[0].properties.name);
+        console.log(pointGeoJson.features[0].geometry.coordinates);
+
+
+        //--Code 4-11--------------------------------------
+        var coorAll = pointGeoJson.features.map((item) => {
+            return item.geometry.coordinates;
+        });
+        console.log(coorAll);
+
+        var filterPoint = pointGeoJson.features.filter((item) => {
+            return item.properties.name.includes("B");
+        });
+        console.log(filterPoint);
+
+
+        //--Code 4-12--------------------------------------
+        var lineGeojson = {
+            type: "FeatureCollection",
+            features: [
+                {
+                    type: "Feature",
+                    properties: {
+                        name: "rd126",
+                    },
+                    geometry: {
+                        type: "LineString",
+                        coordinates: [
+                            [100.18046379089354, 16.73978368572649],
+                            [100.18278121948241, 16.74529056515971],
+                            [100.19522666931152, 16.767809578524716],
+                            [100.21359443664551, 16.761481511890242],
+                        ],
+                    },
+                },
+                {
+                    type: "Feature",
+                    properties: {
+                        name: "rd117",
+                    },
+                    geometry: {
+                        type: "LineString",
+                        coordinates: [
+                            [100.19479751586914, 16.76797394108636],
+                            [100.17685890197752, 16.774383970165566],
+                        ],
+                    },
+                },
+            ],
+        };
+
+        console.log(lineGeojson);
+        console.log(lineGeojson.features[0].geometry.coordinates.length);
+
+        //--Code 4-13--------------------------------------
+        for (let i in lineGeojson.features[0].geometry.coordinates) {
+            console.log(lineGeojson.features[0].geometry.coordinates[i]);
+        }
+
+        var lineCoor = lineGeojson.features[0].geometry.coordinates.map(
+            (item) => {
+                return { lat: item[1], lng: item[0] };
+            }
+        );
+
+        console.log(lineCoor);
+
+
+        //--Code 4-14--------------------------------------
+        var polygonGeojson = {
+            type: "FeatureCollection",
+            features: [
+                {
+                    type: "Feature",
+                    properties: {},
+                    geometry: {
+                        type: "Polygon",
+                        coordinates: [
+                            [
+                                [100.16475677490234, 16.751619170223876],
+                                [100.16561508178711, 16.748249419685727],
+                                [100.16827583312988, 16.74438646155075],
+                                [100.17917633056639, 16.74841379914455],
+                                [100.18346786499023, 16.755071047947055],
+                                [100.17531394958496, 16.7646866628626],
+                                [100.16475677490234, 16.751619170223876],
+                            ],
+                        ],
+                    },
+                },
+                {
+                    type: "Feature",
+                    properties: {},
+                    geometry: {
+                        type: "Polygon",
+                        coordinates: [
+                            [
+                                [100.20458221435547, 16.749400072917176],
+                                [100.20526885986328, 16.748249419685727],
+                                [100.2066421508789, 16.746276855110377],
+                                [100.20818710327148, 16.749564451382533],
+                                [100.20458221435547, 16.749400072917176],
+                            ],
+                        ],
+                    },
+                },
+            ],
+        };
+
+        console.log(polygonGeojson);
+        console.log(polygonGeojson.features[0].geometry.coordinates);
+
+
+        //--Code 4-15--------------------------------------
+        var tourpoint = {
+            type: "FeatureCollection",
+            name: "tour_plk",
+            crs: {
+                type: "name",
+                properties: { name: "urn:ogc:def:crs:OGC:1.3:CRS84" },
+            },
+            features: [
+                {
+                    type: "Feature",
+                    properties: {
+                        Name: "อช.ภูสอยดาว",
+                        Type: "อุทยานและวนอุทยาน",
+                        FID_1: 1358.0,
+                        CHANGWAT: "พิษณุโลก",
+                        PROVINCE_1: "Phitsanulok",
+                        REGION: "ภาคเหนือ",
+                        level: "B",
+                    },
+                    geometry: {
+                        type: "MultiPoint",
+                        coordinates: [[100.947166666666661, 17.69645]],
+                    },
+                },
+                {
+                    type: "Feature",
+                    properties: {
+                        Name: "อช.น้ำตกชาติตระการ",
+                        Type: "อุทยานและวนอุทยาน",
+                        FID_1: 1357.0,
+                        CHANGWAT: "พิษณุโลก",
+                        PROVINCE_1: "Phitsanulok",
+                        REGION: "ภาคเหนือ",
+                        level: "B",
+                    },
+                    geometry: {
+                        type: "MultiPoint",
+                        coordinates: [[100.677166666666665, 17.301816666666667]],
+                    },
+                },
+                {
+                    type: "Feature",
+                    properties: {
+                        Name: "น้ำตกชาติตระการ",
+                        Type: "ธรรมชาติ",
+                        FID_1: 1362.0,
+                        CHANGWAT: "พิษณุโลก",
+                        PROVINCE_1: "Phitsanulok",
+                        REGION: "ภาคเหนือ",
+                        level: "B",
+                    },
+                    geometry: {
+                        type: "MultiPoint",
+                        coordinates: [[100.6831, 17.2981]],
+                    },
+                },
+                {
+                    type: "Feature",
+                    properties: {
+                        Name: "น้ำตกนาจาน",
+                        Type: "ธรรมชาติ",
+                        FID_1: 1364.0,
+                        CHANGWAT: "พิษณุโลก",
+                        PROVINCE_1: "Phitsanulok",
+                        REGION: "ภาคเหนือ",
+                        level: "D",
+                    },
+                    geometry: {
+                        type: "MultiPoint",
+                        coordinates: [[100.691283333333331, 17.3185]],
+                    },
+                },
+                {
+                    type: "Feature",
+                    properties: {
+                        Name: "อช.แก่งเจ็ดแคว",
+                        Type: "อุทยานและวนอุทยาน",
+                        FID_1: 1355.0,
+                        CHANGWAT: "พิษณุโลก",
+                        PROVINCE_1: "Phitsanulok",
+                        REGION: "ภาคเหนือ",
+                        level: "D",
+                    },
+                    geometry: {
+                        type: "MultiPoint",
+                        coordinates: [[100.44016666666667, 17.1411]],
+                    },
+                },
+                {
+                    type: "Feature",
+                    properties: {
+                        Name: "น้ำตกน้ำโจน",
+                        Type: "ธรรมชาติ",
+                        FID_1: 1365.0,
+                        CHANGWAT: "พิษณุโลก",
+                        PROVINCE_1: "Phitsanulok",
+                        REGION: "ภาคเหนือ",
+                        level: "D",
+                    },
+                    geometry: {
+                        type: "MultiPoint",
+                        coordinates: [[100.416783333333328, 17.172966666666667]],
+                    },
+                },
+                {
+                    type: "Feature",
+                    properties: {
+                        Name: "น้ำตกแก่งไทร",
+                        Type: "ธรรมชาติ",
+                        FID_1: 733.0,
+                        CHANGWAT: "มุกดาหาร",
+                        PROVINCE_1: "Mukdahan",
+                        REGION: "ภาคตะวันออกเฉียงเหนือ",
+                        level: "D",
+                    },
+                    geometry: {
+                        type: "MultiPoint",
+                        coordinates: [[100.43675, 17.143116666666668]],
+                    },
+                },
+                {
+                    type: "Feature",
+                    properties: {
+                        Name: "อช.ภูหินร่องกล้า",
+                        Type: "อุทยานและวนอุทยาน",
+                        FID_1: 1359.0,
+                        CHANGWAT: "พิษณุโลก",
+                        PROVINCE_1: "Phitsanulok",
+                        REGION: "ภาคเหนือ",
+                        level: "A",
+                    },
+                    geometry: {
+                        type: "MultiPoint",
+                        coordinates: [[100.993266666666671, 17.00305]],
+                    },
+                },
+                {
+                    type: "Feature",
+                    properties: {
+                        Name: "น้ำตกผาลาด",
+                        Type: "ธรรมชาติ",
+                        FID_1: 603.0,
+                        CHANGWAT: "เลย",
+                        PROVINCE_1: "Loei",
+                        REGION: "ภาคตะวันออกเฉียงเหนือ",
+                        level: "C",
+                    },
+                    geometry: {
+                        type: "MultiPoint",
+                        coordinates: [[100.938583333333327, 17.032866666666667]],
+                    },
+                },
+                {
+                    type: "Feature",
+                    properties: {
+                        Name: "ลานหินแตก",
+                        Type: "ธรรมชาติ",
+                        FID_1: 611.0,
+                        CHANGWAT: "เลย",
+                        PROVINCE_1: "Loei",
+                        REGION: "ภาคตะวันออกเฉียงเหนือ",
+                        level: "A",
+                    },
+                    geometry: { type: "MultiPoint", coordinates: [[100.99, 17.00615]] },
+                },
+                {
+                    type: "Feature",
+                    properties: {
+                        Name: "ลานหินปุ่ม",
+                        Type: "ธรรมชาติ",
+                        FID_1: 1370.0,
+                        CHANGWAT: "พิษณุโลก",
+                        PROVINCE_1: "Phitsanulok",
+                        REGION: "ภาคเหนือ",
+                        level: "B",
+                    },
+                    geometry: {
+                        type: "MultiPoint",
+                        coordinates: [[100.99705, 16.9881]],
+                    },
+                },
+            ],
+        };
+
+        console.log(tourpoint);
+
+
+        //--Code 4-16--------------------------------------
+        for (let i in tourpoint.features) {
+            document.write(
+                tourpoint.features[i].properties.Name +
+                " " +
+                tourpoint.features[i].properties.CHANGWAT +
+                " Lat: " +
+                tourpoint.features[i].geometry.coordinates[0][1] +
+                " Lng: " +
+                tourpoint.features[i].geometry.coordinates[0][0] +
+                "<br>"
+            );
+        }
+
+        //--Code 4-17--------------------------------------
+        var tourPointName = tourpoint.features.map((item) => {
+            return item.properties.Name;
+        });
+
+        console.log(tourPointName);
+
+        var tourPointSimple = tourpoint.features.map((item) => {
+            let name = item.properties.Name;
+            let coors = item.geometry.coordinates;
+            return { tourname: name, coordinates: coors };
+        });
+
+        console.log(tourPointSimple);
+
+
+        //--Code 4-18--------------------------------------
+        function countLevel(tourLevel) {
+            let tourByLevel = tourpoint.features.filter((item) => {
+                return item.properties.level == tourLevel;
+            });
+            return tourByLevel.length;
+        }
+
+        function getTourWithLevel(tourLevel) {
+            let tourByLevel = tourpoint.features.filter((item) => {
+                return item.properties.level == tourLevel;
+            });
+            return tourByLevel;
+        }
+
+        var numOfA = countLevel("A");
+        console.log(numOfA);
+        console.log(countLevel("B"));
+
+        var tourC = getTourWithLevel("C");
+        console.log(tourC);
+
+
+        //--Code 4-19--------------------------------------
+        console.log(tourpoint.features[0].properties.CHANGWAT);
+        tourpoint.features[0].properties.CHANGWAT = "จังหวัดพิษณุโลก";
+        console.log(tourpoint.features[0].properties.CHANGWAT);
+
+        console.log(tourpoint.features[1].properties.level);
+        tourpoint.features[1].properties.level = "A";
+        console.log(tourpoint.features[1].properties.level);
+
+
+        //--Code 4-20--------------------------------------
+        var newTourPoint = tourpoint.features.map((item) => {
+            let newProp = { ...item.properties };
+            newProp.CHANGWAT = "จังหวัดพิษณุโลก";
+
+            return { ...item, properties: newProp };
+        });
+
+        console.log(newTourPoint);
+
+        //--Code 4-21--------------------------------------
+        for (let i in tourpoint.features) {
+            tourpoint.features[i].properties.CHANGWAT = "จังหวัดพิษณุโลก";
+        }
+        console.log(tourpoint);
+
+
+        //--Code 4-22--------------------------------------
+        for (let i in tourpoint.features) {
+            let levelDesc;
+            if (tourpoint.features[i].properties.level == "A") {
+                levelDesc = "ระดับนานาชาติ";
+            } else if (tourpoint.features[i].properties.level == "B") {
+                levelDesc = "ระดับชาติ";
+            } else {
+                levelDesc = "ระดับท้องถิ่น";
+            }
+
+            tourpoint.features[i].properties.level_desc = levelDesc;
+        }
+        console.log(tourpoint);
+
+
+        //--Code 4-23--------------------------------------
+        delete tourpoint.features[0].properties.PROVINCE_1;
+        console.log(tourpoint);
+
+
+        //--Code 4-24--------------------------------------
+        for (let i in tourpoint.features) {
+            delete tourpoint.features[i].properties.PROVINCE_1;
+        }
+        console.log(tourpoint);
+
+        //--Code 4-25--------------------------------------
+        tourpoint.features.splice(4, 2);
+        console.log(tourpoint);
+
+        //--Code 4-26--------------------------------------
+        var newFeature = { ...tourpoint.features[0] };
+        newFeature.geometry.coordinates = [100.9, 17.2];
+        newFeature.properties.FID_1 = 1600;
+        newFeature.properties.Name = "แหล่งท่องเที่ยวใหม่";
+        newFeature.properties.level = "C";
+        newFeature.properties.level_desc = "ระดับท้องถิ่น";
+
+        tourpoint.features.push(newFeature);
+        console.log(tourpoint);
+
+
+    </script>
+</body>
+
+</html>

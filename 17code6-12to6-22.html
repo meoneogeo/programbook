@@ -1,0 +1,590 @@
+<!-- 1 -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin="" />
+
+    <!-- W3 CSS template -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@5/turf.min.js"></script>
+
+    <style>
+        #mapid {
+            height: 800px;
+        }
+    </style>
+
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="mapid"></div>
+
+    <script>
+
+        //--Code 6-12--------------------------------------------------
+        var map = L.map("mapid").setView([17.1376425, 100.561907], 11);
+        var osm = L.tileLayer(
+            "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        ).addTo(map);
+
+        var pointSample = [
+            { name: "Point A", coordinates: [100.6108, 17.2721] },
+            { name: "Point B", coordinates: [100.3751, 17.3455] },
+            { name: "Point C", coordinates: [100.3508, 17.1296] },
+            { name: "Point D", coordinates: [100.8349, 17.1018] },
+            { name: "Point E", coordinates: [100.5689, 17.0171] },
+        ];
+
+        var pointTurf = pointSample.map((item) => {
+            return turf.point(item.coordinates, { name: item.name });
+        });
+        var pointCollection = turf.featureCollection(pointTurf);
+
+        var pointBuffer = turf.buffer(pointCollection, 5, { unit: "kilometers" });
+
+        L.geoJSON(pointCollection, {
+            pointToLayer: function (feature, latlng) {
+                return L.marker(latlng).bindPopup(feature.properties.name);
+            },
+        }).addTo(map);
+
+        console.log(pointBuffer);
+        L.geoJSON(pointBuffer).addTo(map);
+
+
+        //--Code 6-13-----------------------------------------
+        var lineString1 = turf.lineString(
+            [
+                [100.18046379089354, 16.73978368572649],
+                [100.18278121948241, 16.74529056515971],
+                [100.19522666931152, 16.767809578524716],
+                [100.21359443664551, 16.761481511890242],
+            ],
+            { name: "rd126" }
+        );
+        var lineString2 = turf.lineString(
+            [
+                [100.18046379089354, 16.73978368572649],
+                [100.18278121948241, 16.74529056515971],
+                [100.19522666931152, 16.767809578524716],
+                [100.21359443664551, 16.761481511890242],
+            ],
+            { name: "rd117" }
+        );
+
+        var lineFromTurf = turf.featureCollection([lineString1, lineString2]);
+        L.geoJSON(lineFromTurf, {
+            style: function (feature) {
+                return { color: "#FF0000" };
+            },
+        }).addTo(map);
+
+        var lineBuffer = turf.buffer(lineFromTurf, 5, {
+            unit: "kilometers",
+        });
+
+        console.log(lineBuffer);
+        L.geoJSON(lineBuffer).addTo(map);
+
+
+        //--Code 6-14-----------------------------------------
+        var polygon1 = turf.polygon(
+            [
+                [
+                    [100.16475677490234, 16.751619170223876],
+                    [100.16561508178711, 16.748249419685727],
+                    [100.16827583312988, 16.74438646155075],
+                    [100.17917633056639, 16.74841379914455],
+                    [100.18346786499023, 16.755071047947055],
+                    [100.17531394958496, 16.7646866628626],
+                    [100.16475677490234, 16.751619170223876],
+                ],
+            ],
+            { name: "Polygon A" }
+        );
+        var polygon2 = turf.polygon(
+            [
+                [
+                    [100.20458221435547, 16.749400072917176],
+                    [100.20526885986328, 16.748249419685727],
+                    [100.2066421508789, 16.746276855110377],
+                    [100.20818710327148, 16.749564451382533],
+                    [100.20458221435547, 16.749400072917176],
+                ],
+            ],
+            { name: "Polygon B" }
+        );
+
+        var polygonFromTurf = turf.featureCollection([polygon1, polygon2]);
+
+        L.geoJSON(polygonFromTurf, {
+            style: function (feature) {
+                return { color: "#FF0000" };
+            },
+        }).addTo(map);
+
+        var polygonBuffer = turf.buffer(polygonFromTurf, 5, {
+            unit: "kilometers",
+        });
+
+        console.log(polygonBuffer);
+        L.geoJSON(polygonBuffer).addTo(map);
+
+
+        //--Code 6-15-----------------------------------------
+        //voronoi
+        L.geoJSON(pointCollection, {
+            pointToLayer: function (feature, latlng) {
+                return L.marker(latlng).bindPopup(feature.properties.name);
+            },
+        }).addTo(map);
+
+        var pointBound = turf.bbox(pointCollection);
+        var serviceArea = turf.voronoi(pointCollection, { bbox: pointBound });
+        console.log(serviceArea);
+        L.geoJSON(serviceArea).addTo(map);
+
+
+        //--Code 6-16-----------------------------------------
+        var polygonService = {
+            type: "FeatureCollection",
+            features: [
+                {
+                    type: "Feature",
+                    properties: { class: "A" },
+                    geometry: {
+                        type: "Polygon",
+                        coordinates: [
+                            [
+                                [100.46711097728836, 17.225826462491398],
+                                [100.50437885023334, 17.3455],
+                                [100.8349, 17.3455],
+                                [100.8349, 17.334398062243118],
+                                [100.67947575179598, 17.129873258822542],
+                                [100.5038878734196, 17.158724757269482],
+                                [100.46711097728836, 17.225826462491398],
+                            ],
+                        ],
+                    },
+                },
+                {
+                    type: "Feature",
+                    properties: { class: "A" },
+                    geometry: {
+                        type: "Polygon",
+                        coordinates: [
+                            [
+                                [100.50437885023334, 17.3455],
+                                [100.46711097728836, 17.225826462491398],
+                                [100.3508, 17.2389175081056],
+                                [100.3508, 17.3455],
+                                [100.50437885023334, 17.3455],
+                            ],
+                        ],
+                    },
+                },
+                {
+                    type: "Feature",
+                    properties: { class: "A" },
+                    geometry: {
+                        type: "Polygon",
+                        coordinates: [
+                            [
+                                [100.3508, 17.2389175081056],
+                                [100.46711097728836, 17.225826462491398],
+                                [100.5038878734196, 17.158724757269482],
+                                [100.43083521320493, 17.0171],
+                                [100.3508, 17.0171],
+                                [100.3508, 17.2389175081056],
+                            ],
+                        ],
+                    },
+                },
+                {
+                    type: "Feature",
+                    properties: { class: "B" },
+                    geometry: {
+                        type: "Polygon",
+                        coordinates: [
+                            [
+                                [100.67947575179598, 17.129873258822542],
+                                [100.8349, 17.334398062243118],
+                                [100.8349, 17.0171],
+                                [100.71538513157893, 17.0171],
+                                [100.67947575179598, 17.129873258822542],
+                            ],
+                        ],
+                    },
+                },
+                {
+                    type: "Feature",
+                    properties: { class: "B" },
+                    geometry: {
+                        type: "Polygon",
+                        coordinates: [
+                            [
+                                [100.43083521320493, 17.0171],
+                                [100.5038878734196, 17.158724757269482],
+                                [100.67947575179598, 17.129873258822542],
+                                [100.71538513157893, 17.0171],
+                                [100.43083521320493, 17.0171],
+                            ],
+                        ],
+                    },
+                },
+            ],
+        };
+
+        //   L.geoJSON(polygonService, {
+        //     style: function (feature) {
+        //       if (feature.properties.class == "A") {
+        //         return { color: "#FF0000" };
+        //       } else {
+        //         return { color: "#00FF00" };
+        //       }
+        //     },
+        //   }).addTo(map);
+
+        var dissolvePoly = turf.dissolve(polygonService, {
+            propertyName: "class",
+        });
+
+        console.log(dissolvePoly);
+
+        L.geoJSON(dissolvePoly, {
+            style: function (feature) {
+                if (feature.properties.class == "A") {
+                    return { color: "#FF0000" };
+                } else {
+                    return { color: "#00FF00" };
+                }
+            },
+        }).addTo(map);
+
+
+
+        //--Code 6-17-----------------------------------------
+        // -- 1 --
+        var polygon1 = {
+            type: "FeatureCollection",
+            features: [
+                {
+                    type: "Feature",
+                    properties: {},
+                    geometry: {
+                        type: "Polygon",
+                        coordinates: [
+                            [
+                                [100.34611701965332, 16.812264469108527],
+                                [100.34345626831055, 16.80749900862749],
+                                [100.34723281860352, 16.80035059342715],
+                                [100.3699779510498, 16.803883751843774],
+                                [100.36542892456055, 16.81078554591161],
+                                [100.36053657531738, 16.81333257313303],
+                                [100.34611701965332, 16.812264469108527],
+                            ],
+                        ],
+                    },
+                },
+            ],
+        };
+
+        var polygon2 = {
+            type: "FeatureCollection",
+            features: [
+                {
+                    type: "Feature",
+                    properties: {},
+                    geometry: {
+                        type: "Polygon",
+                        coordinates: [
+                            [
+                                [100.32697677612305, 16.81538660242297],
+                                [100.32680511474608, 16.8032264250267],
+                                [100.34156799316406, 16.79320190894216],
+                                [100.3516960144043, 16.799118080828322],
+                                [100.35564422607422, 16.815715245044295],
+                                [100.34757614135742, 16.82310955339233],
+                                [100.33504486083983, 16.823602497024915],
+                                [100.32697677612305, 16.81538660242297],
+                            ],
+                        ],
+                    },
+                },
+            ],
+        };
+
+        L.geoJSON(polygon1, {
+            style: function (feature) {
+                return { color: "#FF0000" };
+            },
+        }).addTo(map);
+
+        L.geoJSON(polygon2, {
+            style: function (feature) {
+                return { color: "#00FF00" };
+            },
+        }).addTo(map);
+
+        var intersectPoly = turf.intersect(
+            polygon1.features[0],
+            polygon2.features[0]
+        );
+        L.geoJSON(intersectPoly, {
+            style: function (feature) {
+                return { color: "#0000FF" };
+            },
+        }).addTo(map);
+
+
+        //--Code 6-18-----------------------------------------
+        var unionPoly = turf.union(polygon1.features[0], polygon2.features[0]);
+        console.log(unionPoly);
+
+        L.geoJSON(unionPoly, {
+            style: function (feature) {
+                return { color: "#0000FF" };
+            },
+        }).addTo(map);
+
+
+        //--Code 6-19-----------------------------------------
+        var differencePoly = turf.difference(
+            polygon1.features[0],
+            polygon2.features[0]
+        );
+        console.log(differencePoly);
+
+        L.geoJSON(differencePoly, {
+            style: function (feature) {
+                return { color: "#0000FF" };
+            },
+        }).addTo(map);
+
+
+
+        //--Code 6-20-----------------------------------------
+        var squareGrid = turf.squareGrid(pointBound, 5, {
+            units: "kilometers",
+        });
+        L.geoJSON(squareGrid, {
+            style: function (feature) {
+                return { color: "#0000FF" };
+            },
+        }).addTo(map);
+
+        var hexGrid = turf.hexGrid(pointBound, 5, {
+            units: "kilometers",
+        });
+        L.geoJSON(hexGrid, {
+            style: function (feature) {
+                return { color: "#FF0000" };
+            },
+        }).addTo(map);
+
+        var pointGrid = turf.pointGrid(pointBound, 5, {
+            units: "kilometers",
+        });
+        L.geoJSON(pointGrid, {
+            style: function (feature) {
+                return { color: "#00FF00" };
+            },
+        }).addTo(map);
+
+        var triangleGrid = turf.triangleGrid(pointBound, 5, {
+            units: "kilometers",
+        });
+        L.geoJSON(triangleGrid, {
+            style: function (feature) {
+                return { color: "#003D00" };
+            },
+        }).addTo(map);
+
+
+        //--Code 6-21-----------------------------------------
+        // -- 1 --
+        var data = {
+            type: "FeatureCollection",
+            features: [
+                {
+                    type: "Feature",
+                    properties: {
+                        pm25: 6,
+                    },
+                    geometry: {
+                        type: "Point",
+                        coordinates: [100.34869194030762, 16.81234663117016],
+                    },
+                },
+                {
+                    type: "Feature",
+                    properties: {
+                        pm25: 10,
+                    },
+                    geometry: {
+                        type: "Point",
+                        coordinates: [100.35984992980957, 16.813250411498597],
+                    },
+                },
+                {
+                    type: "Feature",
+                    properties: {
+                        pm25: 55,
+                    },
+                    geometry: {
+                        type: "Point",
+                        coordinates: [100.37014961242676, 16.801007930206776],
+                    },
+                },
+                {
+                    type: "Feature",
+                    properties: {
+                        pm25: 60,
+                    },
+                    geometry: {
+                        type: "Point",
+                        coordinates: [100.38516998291016, 16.806595200890747],
+                    },
+                },
+                {
+                    type: "Feature",
+                    properties: {
+                        pm25: 20,
+                    },
+                    geometry: {
+                        type: "Point",
+                        coordinates: [100.35092353820801, 16.796735200440846],
+                    },
+                },
+                {
+                    type: "Feature",
+                    properties: {
+                        pm25: 45,
+                    },
+                    geometry: {
+                        type: "Point",
+                        coordinates: [100.36113739013672, 16.789668551685743],
+                    },
+                },
+                {
+                    type: "Feature",
+                    properties: {
+                        pm25: 76,
+                    },
+                    geometry: {
+                        type: "Point",
+                        coordinates: [100.3777027130127, 16.78424513125712],
+                    },
+                },
+                {
+                    type: "Feature",
+                    properties: {
+                        pm25: 5,
+                    },
+                    geometry: {
+                        type: "Point",
+                        coordinates: [100.34276962280273, 16.807006023123108],
+                    },
+                },
+                {
+                    type: "Feature",
+                    properties: {
+                        pm25: 25,
+                    },
+                    geometry: {
+                        type: "Point",
+                        coordinates: [100.35993576049805, 16.803719420353005],
+                    },
+                },
+                {
+                    type: "Feature",
+                    properties: {
+                        pm25: 70,
+                    },
+                    geometry: {
+                        type: "Point",
+                        coordinates: [100.38448333740234, 16.795831341433665],
+                    },
+                },
+            ],
+        };
+
+        L.geoJSON(data, {
+            pointToLayer: function (feature, latlng) {
+                return L.marker(latlng).bindPopup(feature.properties.pm25.toString());
+            },
+        }).addTo(map);
+
+        var pm25Est = turf.interpolate(data, 0.1, {
+            gridType: "point",
+            property: "pm25",
+            units: "kilometers",
+            weight: 1,
+        });
+        console.log(pm25Est);
+
+        L.geoJSON(pm25Est, {
+            style: function (feature) {
+                let pm25_value = feature.properties.pm25;
+
+                if (pm25_value >= 50) {
+                    return { color: "#F41608" };
+                } else if (pm25_value >= 40) {
+                    return { color: "#F47008" };
+                } else if (pm25_value >= 30) {
+                    return { color: "#F4A208" };
+                } else if (pm25_value >= 20) {
+                    return { color: "#F4D408" };
+                } else {
+                    return { color: "#B0F408" };
+                }
+            },
+        }).addTo(map);
+
+
+        //--Code 6-22-----------------------------------------
+        var breakPoint = [];
+        for (let i = 0; i <= 80; i += 2) {
+            breakPoint.push(i);
+        }
+        var pm25_contour = turf.isolines(pm25Est, breakPoint, {
+            zProperty: "pm25",
+        });
+        var pm25_contour_layer = L.geoJSON(pm25_contour, {
+            style: function (feature) {
+                let pm25_value = feature.properties.pm25;
+
+                if (pm25_value >= 50) {
+                    return { color: "#F41608" };
+                } else if (pm25_value >= 40) {
+                    return { color: "#F47008" };
+                } else if (pm25_value >= 30) {
+                    return { color: "#F4A208" };
+                } else if (pm25_value >= 20) {
+                    return { color: "#F4D408" };
+                } else {
+                    return { color: "#B0F408" };
+                }
+            },
+        }).addTo(map);
+
+        pm25_contour_layer.bindToolTip();
+
+        console.log(pm25_contour);
+    </script>
+</body>
+
+</html>

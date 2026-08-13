@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+
+    //--Code 3-14---------------
+    if (true) {
+      console.log("Hello JS condtion");
+    }
+
+    if (false) {
+      console.log("คำสั่งนี้จะไม่่แสดงผล");
+    }
+
+
+    //--Code 3-15---------------
+    var a = 65;
+    if (a > 50) {
+      console.log("ตัวแปร a มีค่ามากกว่า 50");
+    }
+
+    if (a > 50 && a < 70) {
+      console.log("ตัวแปร a อยู่ระหว่าง 51 - 69");
+    }
+
+
+    //--Code 3-16---------------
+    var a = 65;
+    if (a < 50) {
+      console.log("ตัวแปร a มีค่าน้อยกว่าหรือเท่ากับ 50");
+    } else {
+      console.log("ตัวแปร a มีค่ามากกว่า 50");
+    }
+
+    //--Code 3-17---------------
+    var a = 65;
+    if (a >= 80) {
+      console.log("คุณได้เกรด A");
+    } else if (a < 80 && a >= 70) {
+      console.log("คุณได้เกรด B");
+    } else if (a < 70 && a >= 50) {
+      console.log("คุณได้เกรด C");
+    } else if (a < 50 && a >= 40) {
+      console.log("คุณได้เกรด D");
+    } else {
+      console.log("คุณได้เกรด F");
+    }
+
+    //--Code 3-18---------------
+    var a = 4;
+    switch (a) {
+      case 1:
+        console.log("ท่านให้คะแนน 1");
+        break;
+      case 2:
+        console.log("ท่านให้คะแนน 2");
+        break;
+      case 3:
+        console.log("ท่านให้คะแนน 3");
+        break;
+      case 4:
+        console.log("ท่านให้คะแนน 4");
+        break;
+      case 5:
+        console.log("ท่านให้คะแนน 5");
+        break;
+      default:
+        console.log("ท่านให้คะแนนผิด กรุณากรอกเลข 1-5");
+    }
+  </script>
+</body>
+
+</html>

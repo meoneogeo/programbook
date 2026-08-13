@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin="" />
+
+    <!-- W3 CSS template -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@5/turf.min.js"></script>
+
+    <style>
+        #mapid {
+            height: 800px;
+        }
+    </style>
+
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="mapid"></div>
+
+    <script>
+        var map = L.map("mapid").setView([17.1376425, 100.561907], 11);
+        var osm = L.tileLayer(
+            "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        ).addTo(map);
+
+        var pointSample = [
+            { name: "Point A", coordinates: [100.6108, 17.2721] },
+            { name: "Point B", coordinates: [100.3751, 17.3455] },
+            { name: "Point C", coordinates: [100.3508, 17.1296] },
+            { name: "Point D", coordinates: [100.8349, 17.1018] },
+            { name: "Point E", coordinates: [100.5689, 17.0171] },
+        ];
+
+        var pointTurf = pointSample.map((item) => {
+            return turf.point(item.coordinates, { name: item.name });
+        });
+        var pointCollection = turf.featureCollection(pointTurf);
+
+        //   L.geoJSON(pointCollection, {
+        //     pointToLayer: function (feature, latlng) {
+        //       return L.marker(latlng).bindPopup(feature.properties.name);
+        //     },
+        //   }).addTo(map);
+
+        var poly = turf.polygon([
+            [
+                [100.19805908203125, 16.97405449100744],
+                [100.601806640625, 16.97405449100744],
+                [100.601806640625, 17.23525150539053],
+                [100.19805908203125, 17.23525150539053],
+                [100.19805908203125, 16.97405449100744],
+            ],
+        ]);
+
+        L.geoJSON(poly).addTo(map);
+        console.log(poly);
+        console.log(pointCollection);
+        var checkContain = turf.booleanContains(
+            poly,
+            pointCollection.features[4]
+        );
+        console.log(checkContain);
+
+        var checkAll = pointCollection.features.map((item) => {
+            let checkContain = turf.booleanContains(poly, item);
+            return { name: item.properties.name, contain: checkContain };
+        });
+
+        console.log(checkAll);
+
+        var pointSelect = pointCollection.features.filter((item) => {
+            return turf.booleanWithin(item, poly);
+        });
+
+        console.log(pointSelect);
+        var pointSelectGeoJson = turf.featureCollection(pointSelect);
+        console.log(pointSelectGeoJson);
+
+        L.geoJSON(pointSelect, {
+            pointToLayer: function (feature, latlng) {
+                return L.marker(latlng).bindPopup(feature.properties.name);
+            },
+        }).addTo(map);
+    </script>
+</body>
+
+</html>

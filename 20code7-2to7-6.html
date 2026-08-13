@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+      integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+      crossorigin=""
+    />
+
+    <!-- W3 CSS template -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+
+    <script
+      src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+      integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+      crossorigin=""
+    ></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@5/turf.min.js"></script>
+
+    <script src="tourplace.js"></script>
+
+    <style>
+      #mapid {
+        height: 800px;
+      }
+    </style>
+
+    <title>Tour App</title>
+  </head>
+  <body>
+    <div class="w3-row">
+      <div id="mapid" class="w3-half"></div>
+      <div id="content" class="w3-half"></div>
+    </div>
+
+    <script>
+      var searchMarker;
+      var bufferPoly;
+      var tourMarker;
+      var map = L.map("mapid").setView([17.1376425, 100.561907], 11);
+      var osm = L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      ).addTo(map);
+
+      map.on("click", function (e) {
+        if (searchMarker != null) {
+          map.removeLayer(searchMarker);
+          map.removeLayer(bufferPoly);
+          map.removeLayer(tourMarker);
+        }
+
+        let lat = e.latlng.lat;
+        let lng = e.latlng.lng;
+
+        let form = `<div>
+            <p>กรุณากำหนดระยะทาง</p>
+            <input type='number' id='search' class='w3-input'></input><p>กิโลเมตร</p>
+            <center><button class='w3-button w3-blue' onclick='createBuffer(${lat}, ${lng})'>OK</button></center>
+          </div>`;
+
+        searchMarker = L.marker([lat, lng])
+          .addTo(map)
+          .bindPopup(form)
+          .openPopup();
+      });
+
+      function createBuffer(lat, lng) {
+        let dist = document.getElementById("search").value;
+        if (dist <= 0) {
+          alert("กรุณากำหนดระยะทาง");
+          return;
+        }
+
+        let point = turf.point([lng, lat]);
+        let bufferZone = turf.buffer(point, dist, { units: "kilometers" });
+        console.log(bufferZone);
+        searchMarker.closePopup();
+        bufferPoly = L.geoJSON(bufferZone).addTo(map);
+        findTourPlace(bufferZone);
+      }
+
+      function findTourPlace(bZone) {
+        let tourPointFlat = turf.flatten(tourpoint);
+        let tourSelect = tourPointFlat.features.filter((item) => {
+          return turf.booleanWithin(item, bZone);
+        });
+        console.log(tourSelect);
+        tourMarker = L.geoJSON(tourSelect, {
+          onEachFeature: function (feature, layer) {
+            layer.on("mouseover", function () {
+              document
+                .getElementById(feature.properties.FID_1)
+                .classList.add("w3-red");
+            });
+
+            layer.on("mouseout", function () {
+              document
+                .getElementById(feature.properties.FID_1)
+                .classList.remove("w3-red");
+            });
+          },
+        }).addTo(map);
+        showInTable(tourSelect);
+      }
+
+      function showInTable(tourdata) {
+        let cont = `<table class='w3-table w3-striped'>
+          <tr>
+            <th>ชื่อแหล่งท่องเที่ยว</th>
+            <th>ประเภท</th>
+            <th>ระดับ</th>
+          </tr>
+        `;
+        for (let i in tourdata) {
+          cont += `<tr id=${tourdata[i].properties.FID_1}>
+            <td> ${tourdata[i].properties.Name}</td>
+            <td> ${tourdata[i].properties.Type}</td>
+            <td> ${tourdata[i].properties.level}</td>
+            </tr>
+          `;
+        }
+        cont += "</table>";
+        document.getElementById("content").innerHTML = cont;
+      }
+    </script>
+  </body>
+</html>

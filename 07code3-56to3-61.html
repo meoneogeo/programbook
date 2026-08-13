@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    //--Code 3-56-------------------------
+    class Human {
+      constructor(name) {
+        this.name = name;
+      }
+
+      walk() {
+        console.log(this.name + " is walking");
+      }
+    }
+    var man1 = new Human("Joe");
+    console.log(man1.name);
+    man1.walk();
+
+    var man2 = new Human("Jane");
+    console.log(man2.name);
+    man2.walk();
+
+
+    //--Code 3-57-------------------------
+    class Human {
+      constructor(name, age) {
+        this.name = name;
+        this.age = age;
+      }
+
+      walk() {
+        console.log(this.name + " is walking");
+      }
+    }
+    class Student extends Human {
+      constructor(name, age, major) {
+        super(name, age);
+        this.major = major;
+      }
+
+      goToStudy() {
+        console.log(this.name + " is going to study");
+      }
+    }
+    student1 = new Student("Jan", 18, "Geography");
+    student1.walk();
+    student1.goToStudy();
+
+    class Officer extends Human {
+      constructor(name, age, position) {
+        super(name, age);
+        this.position = position;
+      }
+
+      goToWork() {
+        console.log(this.name + " is going to work");
+      }
+    }
+    officer1 = new Officer("Jan", 18, "Software Developer");
+    officer1.walk();
+    officer1.goToWork();
+    officer1.goToStudy();
+
+
+    //--Code 3-58-------------------------
+    class Student extends Human {
+      constructor(name, age, major) {
+        super(name, age);
+        this.major = major;
+        this.energy = 100;
+      }
+      walk() {
+        console.log(this.name + " is going to study");
+        console.log("energy = " + (this.energy -= 10));
+      }
+      goToStudy() {
+        console.log(this.name + " is going to study");
+        console.log("energy = " + (this.energy -= 5));
+      }
+      goToGym() {
+        console.log(this.name + " is going to work out");
+        console.log("energy = " + (this.energy -= 20));
+      }
+      eating() {
+        console.log(this.name + " is eating");
+        console.log("energy = " + (this.energy += 50));
+      }
+    }
+    student1 = new Student("Jan", 18, "Geography");
+    student1.walk();
+    student1.goToStudy();
+    student1.eating();
+
+    student2 = new Student("Captain", 18, "Computer Science");
+    student2.eating();
+    student2.eating();
+    student2.eating();
+    student2.eating();
+
+
+    //--Code 3-59-------------------------
+    class Point {
+      constructor(lat, lng, properties) {
+        this.lat = lat;
+        this.lng = lng;
+        this.properties = properties;
+      }
+
+      showLatLng() {
+        return [this.lat, this.lng];
+      }
+
+      showProperty() {
+        return this.properties;
+      }
+    }
+
+    var point1 = new Point(16.4563, 100.3456, { name: "pointA", level: "C" });
+    console.log(point1.showLatLng());
+    console.log(point1.showProperty());
+
+    var point2 = new Point(16.5452, 100.2541, { name: "pointB", level: "A" });
+    console.log(point1.showLatLng());
+    console.log(point1.showProperty().name);
+
+
+    //--Code 3-60------------------------- 
+    class Line {
+      constructor(x1, y1, x2, y2) {
+        this.x1 = x1;
+        this.y1 = y1;
+        this.x2 = x2;
+        this.y2 = y2;
+        this.length = this.lineLength();
+      }
+
+      lineLength() {
+        let l = Math.sqrt(
+          Math.pow(this.x1 - this.x2, 2) + Math.pow(this.y1 - this.y2, 2)
+        );
+        return l;
+      }
+    }
+
+    var line1 = new Line(2, 2, 8, 8);
+    console.log(line1.lineLength());
+
+    var line2 = new Line(1, 5, 1, 9);
+    console.log(line2.lineLength());
+
+
+    //--Code 3-61-------------------------
+    class Circle {
+      constructor(lat, lng, radius) {
+        this.lat = lat;
+        this.lng = lng;
+        this.radius = radius;
+      }
+
+      center() {
+        return [this.lat, this.lng];
+      }
+
+      area() {
+        return 3.14 * Math.pow(this.radius, 2);
+      }
+
+      perimeter() {
+        return 2 * 3.14 * this.radius;
+      }
+    }
+
+    var circle1 = new Circle(16.343, 100.244, 10);
+    console.log(circle1.center());
+    console.log(circle1.area());
+    console.log(circle1.perimeter());
+  </script>
+</body>
+
+</html>

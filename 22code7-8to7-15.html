@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+      integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+      crossorigin=""
+    />
+
+    <!-- W3 CSS template -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+
+    <script
+      src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+      integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+      crossorigin=""
+    ></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@5/turf.min.js"></script>
+
+    <script src="luse.js"></script>
+
+    <style>
+      #mapid {
+        height: 800px;
+      }
+
+      #maptool {
+        position: absolute;
+        top: 80px;
+        right: 20px;
+        padding: 10px;
+        z-index: 400;
+      }
+
+      #content {
+        position: absolute;
+        bottom: 200px;
+        right: 10px;
+        z-index: 400;
+        border-radius: 25px;
+        background: #e9ecba;
+        padding: 20px;
+        width: 300px;
+        overflow-y: scroll;
+        /* height: 150px; */
+      }
+    </style>
+
+    <title>Land use impact analysis</title>
+  </head>
+  <body>
+    <div id="mapid"></div>
+    <div id="content" class="w3-container"></div>
+
+    <div id="maptool">
+      <div id="drawdiv">
+        <button
+          id="drawButton"
+          class="w3-button w3-blue"
+          onclick="switchDraw()"
+        >
+          Draw
+        </button>
+      </div>
+
+      <div id="bufferdiv">
+        <button
+          id="buffer"
+          class="w3-button w3-green"
+          onclick="bufferFeature()"
+        >
+          Buffer
+        </button>
+      </div>
+
+      <div id="intersectdiv">
+        <button id="intersect" class="w3-button w3-green" onclick="intersect()">
+          Intersect
+        </button>
+      </div>
+
+      <div id="deletediv">
+        <button id="deleteBut" class="w3-button w3-red" onclick="deleteAll()">
+          Delete
+        </button>
+      </div>
+    </div>
+
+    <script>
+      var lineCoor = [];
+      var lineCollect = [];
+      var lineFeature = [];
+      var lineTemp;
+      // var lineSt;
+      var segment;
+      var lineUse;
+      var dblclickFire = false;
+      var draw = false;
+      var bufferButton = false;
+      var bufferTurf;
+      var bufferLayer;
+
+      var map = L.map("mapid").setView(
+        [16.80687392946516, 100.35688611724821],
+        14
+      );
+      var osm = L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      ).addTo(map);
+      map.doubleClickZoom.disable();
+
+      map.on("click", function (e) {
+        if (draw) {
+          let lat = e.latlng.lat;
+          let lng = e.latlng.lng;
+          let lnglat = [lng, lat];
+          lineCoor.push(lnglat);
+          if (lineCoor.length > 1) {
+            let lineSt = turf.lineString(lineCoor);
+            lineTemp = L.geoJSON(lineSt, { color: "#00FF00" }).addTo(map);
+          }
+        }
+      });
+
+      map.on("mousemove", function (e) {
+        if (lineCoor.length > 0) {
+          if (segment != null) {
+            map.removeLayer(segment);
+          }
+
+          point1 = lineCoor[lineCoor.length - 1];
+          point2 = [e.latlng.lng, e.latlng.lat];
+          let lineSeg = turf.lineString([point1, point2]);
+          segment = L.geoJSON(lineSeg).addTo(map);
+        }
+      });
+
+      map.on("dblclick", function (e) {
+        if (draw) {
+          let lat = e.latlng.lat;
+          let lng = e.latlng.lng;
+          let lnglat = [lng, lat];
+          lineCoor.push(lnglat);
+
+          lineCollect = [...lineCoor];
+
+          var lineFin = turf.lineString(lineCollect);
+          lineUse = L.geoJSON(lineFin, { color: "#FF0000" }).addTo(map);
+          lineFeature.push(lineFin);
+          lineCoor = [];
+          map.removeLayer(segment);
+          map.removeLayer(lineTemp);
+          switchDraw();
+        }
+      });
+
+      function deleteLayer() {
+        console.log(lineFeature);
+      }
+
+      function bufferFeature() {
+        bufferButton = !bufferButton;
+        if (bufferButton) {
+          var cont = `
+            <input type='number' id='dist' class='w3-input' required></input>
+            <button id="ok" class="w3-button" onclick="bufferOperate()">
+              OK
+            </button>
+            <button id="cancel" class="w3-button" onclick="closeBuffer()">
+              Cancel
+            </button>
+          `;
+          document.getElementById("bufferdiv").innerHTML = cont;
+        }
+      }
+
+      function switchDraw() {
+        draw = !draw;
+        if (draw) {
+          document.getElementById("drawButton").classList.remove("w3-blue");
+          document.getElementById("drawButton").classList.add("w3-red");
+        } else {
+          document.getElementById("drawButton").classList.remove("w3-red");
+          document.getElementById("drawButton").classList.add("w3-blue");
+        }
+      }
+
+      function closeBuffer() {
+        bufferButton = false;
+        var cont = `
+            <button id="buffer" class="w3-button w3-green" onclick="bufferFeature()">
+              Buffer
+            </button>
+          `;
+
+        document.getElementById("bufferdiv").innerHTML = cont;
+      }
+
+      function bufferOperate() {
+        if (lineCollect.length == 0) {
+          alert("Please draw a line");
+          throw "No line to buffer";
+        } else {
+          var dist = document.getElementById("dist").value;
+          if (dist != 0) {
+            bufferTurf = lineFeature.map((item) => {
+              return turf.buffer(item, dist, { units: "kilometers" });
+            });
+            //console.log(bb);
+            bufferLayer = L.geoJSON(bufferTurf).addTo(map);
+          } else {
+            alert("please input distance");
+            throw "no distance to create buffer";
+          }
+          closeBuffer();
+        }
+      }
+
+      function deleteAll() {
+        lineCollect = [];
+        lineFeature = [];
+        console.log(map.hasLayer(lineTemp));
+        map.eachLayer(function (layer) {
+          if (layer != osm) {
+            map.removeLayer(layer);
+          }
+        });
+        document.getElementById("content").innerHTML = "";
+      }
+
+      function intersect() {
+        let luse_flat = turf.flatten(luse);
+        let inters = turf.intersect(bufferTurf[0], luse.features[2]);
+
+        let interAll = luse_flat.features.map((item) => {
+          return turf.intersect(item, bufferTurf[0], {
+            a: "Test",
+          });
+        });
+
+        let interFilt = interAll.filter((item) => {
+          return item != null;
+        });
+
+        interFilt.forEach((item) => {
+          item.properties.area = turf.area(item);
+        });
+
+        let inter_point = interFilt.map((item) => {
+          return turf.centroid(item, { area: item.properties.area });
+        });
+        let inter_point_collect = turf.featureCollection(inter_point);
+
+        let inter_point_tag = turf.tag(
+          inter_point_collect,
+          luse_flat,
+          "LU_DES_TH",
+          "desc"
+        );
+        console.log(inter_point_tag);
+
+        let luDesc = inter_point_tag.features.map((item) => {
+          return item.properties.desc;
+        });
+        let luDescDis = [...new Set(luDesc)];
+        console.log(luDesc);
+        console.log(luDescDis);
+
+        var luArea = [];
+        for (let i in luDescDis) {
+          var area = 0;
+          var fet = inter_point_tag.features.filter((item) => {
+            return (item.properties.desc = luDescDis[i]);
+          });
+          console.log(fet);
+          for (let j in fet) {
+            area += fet[i].properties.area;
+          }
+          luArea.push({ desc: luDescDis[i], area: area / 1000000 });
+        }
+        L.geoJSON(interFilt, { color: "#00FF00" }).addTo(map);
+
+        map.removeLayer(bufferLayer);
+
+        var cont_area = `<table class="w3-table w3-striped">
+        <tr>
+          <th>Luse</th>
+          <th>พื้นที่ (ตร.กม.)</th>
+        </tr>`;
+        for (let i in luArea) {
+          cont_area += `<tr>
+            <td>${luArea[i].desc}</td>
+            <td>${luArea[i].area.toFixed(2)}</td>
+          </tr>`;
+        }
+        cont_area += "</table>";
+        document.getElementById("content").innerHTML = cont_area;
+      }
+    </script>
+  </body>
+</html>

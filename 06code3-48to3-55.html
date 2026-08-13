@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+
+    //--Code 3-48------------------------------
+    function helloWorld() {
+      console.log("Hello World!");
+    }
+
+    helloWorld();
+
+    //--Code 3-49------------------------------
+    function getPi() {
+      let pi = 3.141592653589793;
+      return pi;
+    }
+
+    var pi = getPi();
+    console.log(pi);
+
+
+    //--Code 3-50------------------------------
+    function addNumber(num1, num2) {
+      let result = num1 + num2;
+      console.log("ผลลัพท์ที่ได้คือ " + result);
+    }
+    addNumber(45, 67);
+    addNumber(2, 49);
+
+    //--Code 3-51------------------------------
+    function myEquation(num1, num2, num3) {
+      let result = 2 * num1 + num2 / 4 + num3 - 2;
+      return result;
+    }
+    var mymath1 = myEquation(34, 24, 5);
+    console.log(mymath1);
+    console.log(myEquation(5, 35, 2));
+
+    //--Code 3-52------------------------------
+    var mymath2 = myEquation(67, 35, 54);
+    addNumber(mymath1, mymath2);
+
+
+    //--Code 3-53------------------------------
+    function calcArea(height, width, type) {
+      let area;
+      if (type == 1) {
+        area = height * width;
+      } else if (type == 2) {
+        area = 0.5 * height * width;
+      } else {
+        area = "คุณไม่ได้กำหนดรูปทรงเรขาคณิต";
+      }
+      return area;
+    }
+
+    console.log(calcArea(34, 23, 1));
+    console.log(calcArea(34, 23, 2));
+    console.log(calcArea(34, 23, 8));
+
+
+    //--Code 3-54------------------------------
+    function sumDataInArray(anArray) {
+      let sum = 0;
+      for (var i in anArray) {
+        sum += anArray[i];
+      }
+      return sum;
+    }
+
+    var myArray = [23, 4, 25, 43, 6, 44, 55, 123];
+    console.log(sumDataInArray(myArray));
+
+
+    //--Code 3-55------------------------------
+    function getCoordinate(anObject) {
+      let coors = anObject.map((item) => {
+        return item.coordinate;
+      });
+      return coors;
+    }
+
+    var myObject = [
+      {
+        name: "วัดใหญ่",
+        coordinate: [16.823733139595014, 100.26208978216431],
+      },
+      {
+        name: "วัดราษฎร์บูรณะ",
+        coordinate: [16.82209470135332, 100.26065774774955],
+      },
+      {
+        name: "วัดนางพญา",
+        coordinate: [16.822610789009357, 100.26191366549615],
+      },
+    ];
+
+    console.log(getCoordinate(myObject));
+  </script>
+</body>
+
+</html>

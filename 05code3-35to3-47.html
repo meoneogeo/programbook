@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+
+    //--Code 3-35------------------------------
+    var a = {
+      id: 1,
+      name: "John",
+      age: 43,
+      gender: "male",
+    };
+
+    console.log(a);
+    console.log(a["name"]);
+    console.log(a.name);
+    console.log(a.age);
+
+    //--Code 3-36------------------------------
+    var b = {
+      id: 2,
+      name: "Joe",
+      age: 21,
+      gender: "male",
+      location: [16.45354, 100.34545],
+      graduate: false,
+      subject: { math: 50, geography: 60 },
+    };
+
+    console.log(b);
+    console.log(b.location[0]);
+    console.log(b.subject.math);
+
+
+    //--Code 3-37------------------------------
+    var b = {
+      id: 2,
+      name: "Joe",
+      age: 21,
+      gender: "male",
+      location: [16.45354, 100.34545],
+      subject: { math: 50, geography: 60 },
+    };
+
+    b.height = 180;
+    console.log(b);
+
+    var b = {
+      id: 2,
+      name: "Joe",
+      age: 21,
+      gender: "male",
+      location: [16.45354, 100.34545],
+      subject: { math: 50, geography: 60 },
+    };
+
+    b.subject.geography = 80;
+    console.log(b);
+
+    var b = {
+      id: 2,
+      name: "Joe",
+      age: 21,
+      gender: "male",
+      location: [16.45354, 100.34545],
+      subject: { math: 50, geography: 60 },
+    };
+
+    delete b.location;
+    console.log(b);
+
+
+    //--Code 3-38------------------------------
+    var c = {
+      name: "Jeoy JeeO",
+    };
+
+    var d = {
+      age: 30,
+    };
+
+    var e = { ...c, ...d };
+    console.log(e);
+
+    var f = { ...e, gender: "female" };
+    console.log(f);
+
+    //--Code 3-39------------------------------
+    var tourPlace = [
+      {
+        id: 1,
+        name: "วัดใหญ่ฯ",
+        province: "พิษณุโลก",
+        coordinate: [16.823733139595014, 100.26208978216431],
+      },
+      {
+        id: 2,
+        name: "วัดราษฎร์บูรณะ",
+        province: "พิษณุโลก",
+        coordinate: [16.82209470135332, 100.26065774774955],
+      },
+      {
+        id: 3,
+        name: "วัดนางพญา",
+        province: "พิษณุโลก",
+        coordinate: [16.822610789009357, 100.26191366549615],
+      },
+      {
+        id: 4,
+        name: "พระราชวังจันทน์",
+        province: "พิษณุโลก",
+        coordinate: [16.829756050098936, 100.26151036481399],
+      },
+    ];
+
+    console.log(tourPlace);
+    console.log(tourPlace[0].name);
+    console.log(tourPlace[2].coordinate);
+
+
+    //--Code 3-40------------------------------
+    for (var i in tourPlace) {
+      document.write(
+        tourPlace[i].name +
+        " Lat: " +
+        tourPlace[i].coordinate[0] +
+        " Lng: " +
+        tourPlace[i].coordinate[1] +
+        "<br>"
+      );
+    }
+
+    //--Code 3-41------------------------------
+    var tourName = tourPlace.map((item) => {
+      return item.name;
+    });
+    console.log(tourName);
+
+
+    //--Code 3-42------------------------------
+    var tourPlaceNew = tourPlace.map((item) => {
+      return { name: item.name, coors: item.coordinate };
+    });
+    console.log(tourPlaceNew);
+
+    //--Code 3-43------------------------------
+    var watyai = tourPlace.filter((item) => {
+      return item.name.includes("วัดใหญ่");
+    });
+    console.log(watyai);
+
+    //--Code 3-44------------------------------
+    var wat = tourPlace.filter((item) => {
+      return item.name.includes("วัด");
+    });
+    console.log(wat);
+
+    //--Code 3-45------------------------------
+    var wat = tourPlace.find((item) => {
+      return item.id >= 2;
+    });
+    console.log(wat);
+
+    //--Code 3-46------------------------------
+    var checkAllWat = tourPlace.every((item) => {
+      return item.name.includes("วัด");
+    });
+    console.log(checkAllWat);
+
+    var checkSomeWat = tourPlace.some((item) => {
+      return item.name.includes("วัด");
+    });
+    console.log(checkSomeWat);
+
+
+    //--Code 3-47------------------------------
+    var prov = [
+      { name: "พิษณุโลก", pop: 847874 },
+      { name: "พิจิตร", pop: 531690 },
+      { name: "สุโขทัย", pop: 587191 },
+      { name: "อุตรดิตถ์", pop: 447661 },
+      { name: "ตาก", pop: 542992 },
+      { name: "กำแพงเพชร", pop: 712587 },
+      { name: "นครสวรรค์", pop: 1038343 },
+      { name: "เพชรบูรณ์", pop: 980007 },
+      { name: "อุทัยธานี", pop: 325396 },
+    ];
+
+    var popSum = prov.reduce((sum, item) => {
+      return sum + item.pop;
+    }, 0);
+    console.log(popSum);
+
+  </script>
+</body>
+
+</html>
